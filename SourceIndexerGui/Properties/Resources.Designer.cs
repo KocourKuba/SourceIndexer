@@ -8,7 +8,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace SourceIndexer.Properties
+namespace SourceIndexerNS.Properties
 {
 
 

@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Collections.Generic;
 
-namespace SourceIndexer
+namespace SourceIndexerNS
 {
-  public abstract class IFrontEnd
-  {
-    string SourceRoot;
-    public Logger Logger = new Logger();
-
-    public virtual void SetSourceRoot(string sourceRoot)
+    public abstract class IFrontEnd
     {
-      SourceRoot = sourceRoot;
-    }
+        SettingsBean Parameters;
+        public Logger LogWriter = new Logger();
 
-    public abstract void EvaluateFiles(List<SourceFile> pdbFiles);
-    public abstract List<RepositoryInfo> GetRepositoryInfo();
-  }
+        public virtual void SetParameters(SettingsBean Params)
+        {
+            Parameters = Params;
+        }
+
+        public abstract void EvaluateFiles(List<SourceFile> pdbFiles);
+        public abstract List<RepositoryInfo> GetRepositoryInfo();
+    }
 }

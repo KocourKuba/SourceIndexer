@@ -1,49 +1,49 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace SourceIndexer
+namespace SourceIndexerNS
 {
-  public class PdbStr
-  {
-    static public string ReadStream(string pdbPath, string streamName)
+    public class PdbStr
     {
-      ProcessStartInfo info = new ProcessStartInfo();
-      info.FileName = "External/pdbstr.exe";
-      info.Arguments = String.Format("-r -p:\"{0}\" -s:{1}", pdbPath, streamName);
-      info.UseShellExecute = false;
-      info.RedirectStandardOutput = true;
-      Process process = Process.Start(info);
-      string output = process.StandardOutput.ReadToEnd();
-      process.WaitForExit();
-      return output;
-    }
+        static public string ReadStream(SettingsBean Parameters, string streamName)
+        {
+            ProcessStartInfo info = new ProcessStartInfo
+            {
+                FileName = string.Format("\"{0}\\pdbstr.exe\"", Parameters.ToolsPath),
+                Arguments = string.Format("-r -p:\"{0}\" -s:{1}", Parameters.PdbFile, streamName),
+                UseShellExecute = false,
+                RedirectStandardOutput = true
+            };
+            Process process = Process.Start(info);
+            string output = process.StandardOutput.ReadToEnd();
+            process.WaitForExit();
+            return output;
+        }
 
-    static public string ReadStream(string pdbPath)
-    {
-      return ReadStream(pdbPath, "srcsrv");
-    }
+        static public string ReadStream(SettingsBean Parameters)
+        {
+            return ReadStream(Parameters, "srcsrv");
+        }
 
-    static public void WriteStream(string pdbPath, string streamContents)
-    {
-      WriteStream(pdbPath, "srcsrv", streamContents);
-    }
+        static public void WriteStream(SettingsBean Parameters, string streamContents)
+        {
+            WriteStream(Parameters, "srcsrv", streamContents);
+        }
 
-    static public void WriteStream(string pdbPath, string streamName, string streamContents)
-    {
-      var outFilePath = "SrcSrvOut.txt";
-      File.WriteAllText(outFilePath, streamContents);
+        static public void WriteStream(SettingsBean Parameters, string streamName, string streamContents)
+        {
+            var outFilePath = "SrcSrvOut.txt";
+            File.WriteAllText(outFilePath, streamContents);
 
-      ProcessStartInfo info = new ProcessStartInfo();
-      info.FileName = "External/pdbstr.exe";
-      info.Arguments = String.Format("-w -p:\"{0}\" -s:{1} -i:{2}", pdbPath, streamName, outFilePath);
-      info.UseShellExecute = false;
-      Process process = Process.Start(info);
-      process.WaitForExit();
+            ProcessStartInfo info = new ProcessStartInfo
+            {
+                FileName = string.Format("\"{0}\\pdbstr.exe\"", Parameters.ToolsPath),
+                Arguments = string.Format("-w -p:\"{0}\" -s:{1} -i:{2}", Parameters.PdbFile, streamName, outFilePath),
+                UseShellExecute = false
+            };
+            Process process = Process.Start(info);
+            process.WaitForExit();
+        }
     }
-  }
 }
