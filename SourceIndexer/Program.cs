@@ -68,7 +68,7 @@ namespace SourceIndexerNS
             SettingsBean Params = new SettingsBean
             {
                 PdbFile = Path.GetFullPath(opts.PdbFile),
-                SourcePath = Path.GetFullPath(opts.SourcePath),
+                SourcePath = Path.GetFullPath(opts.SourcePath.TrimEnd(charsToTrim)),
                 ToolsPath = Path.GetFullPath(tools),
                 SrcSrvIniPath = Path.GetFullPath(ini),
                 BackEndType = (opts.BackEnd != null) ? opts.BackEnd.ToUpper() : "CMD",
