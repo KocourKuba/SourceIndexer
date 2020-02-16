@@ -43,9 +43,9 @@ namespace SourceIndexerNS
 
         private void EvaluateResults(SourceIndexer sourceIndexer)
         {
-            this.EvaluatedRichTextBox.Text = this.NormalizeNewlines(sourceIndexer.EvaluateSourceIndexing());
-            this.StreamRichTextBox.Text = this.NormalizeNewlines(sourceIndexer.GetSourceIndexingResults());
-            this.UnindexedRichTextBox.Text = this.NormalizeNewlines(sourceIndexer.GetUnindexedList());
+            EvaluatedRichTextBox.Text = NormalizeNewlines(sourceIndexer.EvaluateSourceIndexing());
+            StreamRichTextBox.Text = NormalizeNewlines(sourceIndexer.GetSourceIndexingResults());
+            UnindexedRichTextBox.Text = NormalizeNewlines(sourceIndexer.GetUnindexedList());
         }
         string NormalizeNewlines(string data)
         {
@@ -56,11 +56,12 @@ namespace SourceIndexerNS
         {
             SettingsBean Params = new SettingsBean
             {
-                PdbFile = this.PdbPathTextBox.Text,
-                SourcePath = this.SourceRootTextBox.Text,
-                ToolsPath = this.SrcToolsPath.Text,
-                SrcSrvIniPath = this.SrcSrvIniPath.Text,
-                BackEndType = BackendComboBox.SelectedItem.ToString().ToUpper()
+                PdbFile = PdbPathTextBox.Text,
+                SourcePath = SourceRootTextBox.Text,
+                ToolsPath = SrcToolsPath.Text,
+                SrcSrvIniPath = SrcSrvIniPath.Text,
+                BackEndType = BackendComboBox.SelectedItem.ToString().ToUpper(),
+                CustomCommand = customCommandText.Text
             };
             return new SourceIndexer(Params);
         }
@@ -79,56 +80,64 @@ namespace SourceIndexerNS
 
         private void Form1_Load(object sender, EventArgs e)
         {
-            this.BackendComboBox.Items.Add(new CmdBackEnd());
-            this.BackendComboBox.Items.Add(new GitBackEnd());
-            this.BackendComboBox.Items.Add(new GitHubBackEnd());
-            this.BackendComboBox.SelectedIndex = 0;
+            BackendComboBox.Items.Add(new CmdBackEnd());
+            BackendComboBox.Items.Add(new GitBackEnd());
+            BackendComboBox.Items.Add(new GitHubBackEnd());
+            BackendComboBox.SelectedIndex = 0;
         }
 
         private void SourceBrowseButton_Click(object sender, EventArgs e)
         {
             // Show the FolderBrowserDialog.
-            this.folderBrowserDialog1.SelectedPath = this.SourceRootTextBox.Text;
-            DialogResult result = this.folderBrowserDialog1.ShowDialog();
+            folderBrowserDialog1.SelectedPath = SourceRootTextBox.Text;
+            DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
-                this.SourceRootTextBox.Text = this.folderBrowserDialog1.SelectedPath;
-                Environment.SpecialFolder root = this.folderBrowserDialog1.RootFolder;
+                SourceRootTextBox.Text = folderBrowserDialog1.SelectedPath;
+                Environment.SpecialFolder root = folderBrowserDialog1.RootFolder;
             }
         }
 
         private void ToolsBrowseButton_Click(object sender, EventArgs e)
         {
             // Show the FolderBrowserDialog.
-            this.folderBrowserDialog1.SelectedPath = this.SrcToolsPath.Text;
-            DialogResult result = this.folderBrowserDialog1.ShowDialog();
+            folderBrowserDialog1.SelectedPath = SrcToolsPath.Text;
+            DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
-                this.SrcToolsPath.Text = this.folderBrowserDialog1.SelectedPath;
-                Environment.SpecialFolder root = this.folderBrowserDialog1.RootFolder;
+                SrcToolsPath.Text = folderBrowserDialog1.SelectedPath;
+                Environment.SpecialFolder root = folderBrowserDialog1.RootFolder;
             }
         }
 
         private void PdbBrowseDialog_Click(object sender, EventArgs e)
         {
             // Show the FolderBrowserDialog.
-            this.openFileDialog1.FileName = this.PdbPathTextBox.Text;
-            DialogResult result = this.openFileDialog1.ShowDialog();
+            openFileDialog1.FileName = PdbPathTextBox.Text;
+            DialogResult result = openFileDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
-                this.PdbPathTextBox.Text = this.openFileDialog1.FileName;
+                PdbPathTextBox.Text = openFileDialog1.FileName;
             }
         }
 
         private void IniBrowseButton_Click(object sender, EventArgs e)
         {
             // Show the FolderBrowserDialog.
-            this.folderBrowserDialog1.SelectedPath = this.SrcSrvIniPath.Text;
-            DialogResult result = this.folderBrowserDialog1.ShowDialog();
+            folderBrowserDialog1.SelectedPath = SrcSrvIniPath.Text;
+            DialogResult result = folderBrowserDialog1.ShowDialog();
             if (result == DialogResult.OK)
             {
-                this.SrcSrvIniPath.Text = this.folderBrowserDialog1.SelectedPath;
-                Environment.SpecialFolder root = this.folderBrowserDialog1.RootFolder;
+                SrcSrvIniPath.Text = folderBrowserDialog1.SelectedPath;
+                Environment.SpecialFolder root = folderBrowserDialog1.RootFolder;
+            }
+        }
+
+        private void BackendComboBox_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if(BackendComboBox.SelectedIndex != 0)
+            {
+                customCommandText.Visible = false;
             }
         }
     }

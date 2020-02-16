@@ -40,6 +40,11 @@
             this.RunButton = new System.Windows.Forms.Button();
             this.EvaluateButton = new System.Windows.Forms.Button();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.customCommandText = new System.Windows.Forms.TextBox();
+            this.PdbBrowseDialog = new System.Windows.Forms.Button();
+            this.IniBrowseButton = new System.Windows.Forms.Button();
+            this.ToolsBrowseButton = new System.Windows.Forms.Button();
+            this.SourceBrowseButton = new System.Windows.Forms.Button();
             this.SrcSrvIniPath = new System.Windows.Forms.TextBox();
             this.label4 = new System.Windows.Forms.Label();
             this.SrcToolsPath = new System.Windows.Forms.TextBox();
@@ -50,10 +55,7 @@
             this.SourceRootTextBox = new System.Windows.Forms.TextBox();
             this.folderBrowserDialog1 = new System.Windows.Forms.FolderBrowserDialog();
             this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
-            this.SourceBrowseButton = new System.Windows.Forms.Button();
-            this.ToolsBrowseButton = new System.Windows.Forms.Button();
-            this.PdbBrowseDialog = new System.Windows.Forms.Button();
-            this.IniBrowseButton = new System.Windows.Forms.Button();
+            this.label5 = new System.Windows.Forms.Label();
             this.tabControl1.SuspendLayout();
             this.tabPage1.SuspendLayout();
             this.tabPage2.SuspendLayout();
@@ -179,6 +181,8 @@
             // 
             // panel1
             // 
+            this.panel1.Controls.Add(this.label5);
+            this.panel1.Controls.Add(this.customCommandText);
             this.panel1.Controls.Add(this.PdbBrowseDialog);
             this.panel1.Controls.Add(this.IniBrowseButton);
             this.panel1.Controls.Add(this.ToolsBrowseButton);
@@ -198,6 +202,54 @@
             this.panel1.Name = "panel1";
             this.panel1.Size = new System.Drawing.Size(800, 100);
             this.panel1.TabIndex = 5;
+            // 
+            // customCommandText
+            // 
+            this.customCommandText.Location = new System.Drawing.Point(669, 66);
+            this.customCommandText.Name = "customCommandText";
+            this.customCommandText.Size = new System.Drawing.Size(95, 20);
+            this.customCommandText.TabIndex = 10;
+            this.customCommandText.Text = "gitextract.cmd";
+            // 
+            // PdbBrowseDialog
+            // 
+            this.PdbBrowseDialog.Location = new System.Drawing.Point(630, 27);
+            this.PdbBrowseDialog.Name = "PdbBrowseDialog";
+            this.PdbBrowseDialog.Size = new System.Drawing.Size(28, 23);
+            this.PdbBrowseDialog.TabIndex = 9;
+            this.PdbBrowseDialog.Text = "...";
+            this.PdbBrowseDialog.UseVisualStyleBackColor = true;
+            this.PdbBrowseDialog.Click += new System.EventHandler(this.PdbBrowseDialog_Click);
+            // 
+            // IniBrowseButton
+            // 
+            this.IniBrowseButton.Location = new System.Drawing.Point(630, 63);
+            this.IniBrowseButton.Name = "IniBrowseButton";
+            this.IniBrowseButton.Size = new System.Drawing.Size(28, 23);
+            this.IniBrowseButton.TabIndex = 9;
+            this.IniBrowseButton.Text = "...";
+            this.IniBrowseButton.UseVisualStyleBackColor = true;
+            this.IniBrowseButton.Click += new System.EventHandler(this.IniBrowseButton_Click);
+            // 
+            // ToolsBrowseButton
+            // 
+            this.ToolsBrowseButton.Location = new System.Drawing.Point(319, 64);
+            this.ToolsBrowseButton.Name = "ToolsBrowseButton";
+            this.ToolsBrowseButton.Size = new System.Drawing.Size(28, 23);
+            this.ToolsBrowseButton.TabIndex = 9;
+            this.ToolsBrowseButton.Text = "...";
+            this.ToolsBrowseButton.UseVisualStyleBackColor = true;
+            this.ToolsBrowseButton.Click += new System.EventHandler(this.ToolsBrowseButton_Click);
+            // 
+            // SourceBrowseButton
+            // 
+            this.SourceBrowseButton.Location = new System.Drawing.Point(319, 26);
+            this.SourceBrowseButton.Name = "SourceBrowseButton";
+            this.SourceBrowseButton.Size = new System.Drawing.Size(28, 23);
+            this.SourceBrowseButton.TabIndex = 8;
+            this.SourceBrowseButton.Text = "...";
+            this.SourceBrowseButton.UseVisualStyleBackColor = true;
+            this.SourceBrowseButton.Click += new System.EventHandler(this.SourceBrowseButton_Click);
             // 
             // SrcSrvIniPath
             // 
@@ -235,9 +287,9 @@
             this.label3.AutoSize = true;
             this.label3.Location = new System.Drawing.Point(40, 50);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(58, 13);
+            this.label3.Size = new System.Drawing.Size(129, 13);
             this.label3.TabIndex = 4;
-            this.label3.Text = "Tools Path";
+            this.label3.Text = "Source Server Tools Path";
             // 
             // label2
             // 
@@ -255,15 +307,16 @@
             this.BackendComboBox.Name = "BackendComboBox";
             this.BackendComboBox.Size = new System.Drawing.Size(95, 21);
             this.BackendComboBox.TabIndex = 2;
+            this.BackendComboBox.SelectedIndexChanged += new System.EventHandler(this.BackendComboBox_SelectedIndexChanged);
             // 
             // label1
             // 
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(40, 11);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(67, 13);
+            this.label1.Size = new System.Drawing.Size(92, 13);
             this.label1.TabIndex = 0;
-            this.label1.Text = "Source Root";
+            this.label1.Text = "Source Root Path";
             // 
             // SourceRootTextBox
             // 
@@ -280,45 +333,14 @@
             // 
             this.openFileDialog1.FileName = "openFileDialog1";
             // 
-            // SourceBrowseButton
+            // label5
             // 
-            this.SourceBrowseButton.Location = new System.Drawing.Point(319, 26);
-            this.SourceBrowseButton.Name = "SourceBrowseButton";
-            this.SourceBrowseButton.Size = new System.Drawing.Size(28, 23);
-            this.SourceBrowseButton.TabIndex = 8;
-            this.SourceBrowseButton.Text = "...";
-            this.SourceBrowseButton.UseVisualStyleBackColor = true;
-            this.SourceBrowseButton.Click += new System.EventHandler(this.SourceBrowseButton_Click);
-            // 
-            // ToolsBrowseButton
-            // 
-            this.ToolsBrowseButton.Location = new System.Drawing.Point(319, 64);
-            this.ToolsBrowseButton.Name = "ToolsBrowseButton";
-            this.ToolsBrowseButton.Size = new System.Drawing.Size(28, 23);
-            this.ToolsBrowseButton.TabIndex = 9;
-            this.ToolsBrowseButton.Text = "...";
-            this.ToolsBrowseButton.UseVisualStyleBackColor = true;
-            this.ToolsBrowseButton.Click += new System.EventHandler(this.ToolsBrowseButton_Click);
-            // 
-            // PdbBrowseDialog
-            // 
-            this.PdbBrowseDialog.Location = new System.Drawing.Point(630, 27);
-            this.PdbBrowseDialog.Name = "PdbBrowseDialog";
-            this.PdbBrowseDialog.Size = new System.Drawing.Size(28, 23);
-            this.PdbBrowseDialog.TabIndex = 9;
-            this.PdbBrowseDialog.Text = "...";
-            this.PdbBrowseDialog.UseVisualStyleBackColor = true;
-            this.PdbBrowseDialog.Click += new System.EventHandler(this.PdbBrowseDialog_Click);
-            // 
-            // IniBrowseButton
-            // 
-            this.IniBrowseButton.Location = new System.Drawing.Point(630, 63);
-            this.IniBrowseButton.Name = "IniBrowseButton";
-            this.IniBrowseButton.Size = new System.Drawing.Size(28, 23);
-            this.IniBrowseButton.TabIndex = 9;
-            this.IniBrowseButton.Text = "...";
-            this.IniBrowseButton.UseVisualStyleBackColor = true;
-            this.IniBrowseButton.Click += new System.EventHandler(this.IniBrowseButton_Click);
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(666, 51);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(115, 13);
+            this.label5.TabIndex = 11;
+            this.label5.Text = "Custom cmd Command";
             // 
             // Form1
             // 
@@ -371,6 +393,8 @@
         private System.Windows.Forms.Button IniBrowseButton;
         private System.Windows.Forms.Button ToolsBrowseButton;
         private System.Windows.Forms.Button SourceBrowseButton;
+        private System.Windows.Forms.TextBox customCommandText;
+        private System.Windows.Forms.Label label5;
     }
 }
 

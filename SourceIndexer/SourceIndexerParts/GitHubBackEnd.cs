@@ -43,7 +43,7 @@ namespace SourceIndexerNS
             {
                 organization = match.Groups[1].Value.ToString();
                 project = match.Groups[2].Value.ToString();
-                Logger.Log(VerbosityLevel.Detailed, string.Format("Repo '{0}' found with organization '{1}' and project '{2}'", remoteUrl, organization, project));
+                LogWriter.Log(VerbosityLevel.Detailed, string.Format("Repo '{0}' found with organization '{1}' and project '{2}'", remoteUrl, organization, project));
                 return true;
             }
             return false;

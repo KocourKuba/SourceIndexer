@@ -17,27 +17,57 @@ namespace SourceIndexerNS
         ///               [-s|--source <path>] [-t|--tools <path>] [-i|--ini <path>] [<eval> <filename.pdb>]
         ///               [-?|-h|--help]
         /// </remarks>
-        private readonly char[] charsToTrim = { '\\', '/' };
 
         class CommonOptions
         {
             [Option('p', "pdbFile", Required = true, HelpText = "Path to the pdb file.")]
-            public string PdbFile { get; set; }
+            public string PdbFile
+            {
+                get { return _pdbFile; }
+                set { _pdbFile = Path.GetFullPath(value); }
+            }
             [Option('t', "tools", Required = false, HelpText = "The path where Source Server files are located. If omitted used \"External\" folder near the app.")]
-            public string ToolsPath { get; set; }
+            public string ToolsPath
+            {
+                get { return _toolsPath; }
+                set { _toolsPath = Path.GetFullPath(value ?? "External"); }
+            }
+            [Option('l', "log", Required = false, HelpText = "Log level: None, Error, Warning, Basic, Detailed")]
+            public string LogLevel { get; set; } = "Basic";
+
+            private string _pdbFile;
+            private string _toolsPath;
         }
 
         [Verb("index", HelpText = "Perform indexing source files.")]
         class IndexOptions : CommonOptions
         {
+            private readonly char[] charsToTrim = { '\\', '/' };
+
             [Option('s', "source", Required = true, HelpText = "Path to the source files.")]
-            public string SourcePath { get; set; }
+            public string SourcePath
+            {
+                get { return _sourcePath; }
+                set { _sourcePath = Path.GetFullPath(value.TrimEnd(charsToTrim)); }
+            }
 
             [Option('i', "ini", Required = false, HelpText = "The path where the srcsrv.ini file is located. If not specified used file in the Source Server path.")]
-            public string IniPath { get; set; }
+            public string IniPath
+            {
+                get { return _iniPath; }
+                set { _iniPath = Path.GetFullPath(value.TrimEnd(charsToTrim)); }
+            }
 
             [Option('b', "backend", Required = false, HelpText = "Backend used for indexing. Allowed options: CMD, GIT, GITHUB. Default: CMD")]
-            public string BackEnd { get; set; }
+            public string BackEnd
+            {
+                get { return _backEnd; }
+                set { _backEnd = value ?? "cmd"; }
+            }
+
+            private string _sourcePath;
+            private string _iniPath;
+            private string _backEnd;
         }
 
         [Verb("eval", HelpText = "Record changes to the repository.")]
@@ -63,15 +93,20 @@ namespace SourceIndexerNS
             if (opts.SourcePath.Length == 0 || opts.PdbFile.Length == 0)
                 return 1;
 
-            var tools = (opts.ToolsPath != null) ? opts.ToolsPath.TrimEnd(charsToTrim) : "External";
-            var ini = (opts.IniPath != null) ? opts.IniPath.TrimEnd(charsToTrim) : tools;
+            var ini = opts.IniPath ?? opts.ToolsPath;
+            var arr = opts.BackEnd.Split(':');
+            var backEndType = arr[0].ToUpper();
+            var customCmd = arr.Length > 1 ? arr[1] : "git";
+
             SettingsBean Params = new SettingsBean
             {
-                PdbFile = Path.GetFullPath(opts.PdbFile),
-                SourcePath = Path.GetFullPath(opts.SourcePath.TrimEnd(charsToTrim)),
-                ToolsPath = Path.GetFullPath(tools),
-                SrcSrvIniPath = Path.GetFullPath(ini),
-                BackEndType = (opts.BackEnd != null) ? opts.BackEnd.ToUpper() : "CMD",
+                PdbFile = opts.PdbFile,
+                SourcePath = opts.SourcePath,
+                ToolsPath = opts.ToolsPath,
+                SrcSrvIniPath = ini,
+                BackEndType = backEndType,
+                CustomCommand = customCmd,
+                LogLevel = opts.LogLevel,
             };
 
             new SourceIndexer(Params).RunSourceIndexing();
@@ -81,8 +116,8 @@ namespace SourceIndexerNS
         {
             SettingsBean Params = new SettingsBean
             {
-                PdbFile = Path.GetFullPath(opts.PdbFile),
-                ToolsPath = Path.GetFullPath((opts.ToolsPath != null) ? opts.ToolsPath.TrimEnd(charsToTrim) : "External"),
+                PdbFile = opts.PdbFile,
+                ToolsPath = opts.ToolsPath,
             };
 
             var indexer = new SourceIndexer(Params);

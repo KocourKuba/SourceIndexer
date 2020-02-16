@@ -43,6 +43,8 @@ namespace SourceIndexerNS
                 // Default backend
                 BackEnd = new CmdBackEnd();
             }
+
+            BackEnd.Parameters = Params;
         }
         public virtual void SetParameters(SettingsBean Params)
         {

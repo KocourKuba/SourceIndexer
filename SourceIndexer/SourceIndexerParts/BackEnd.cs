@@ -4,7 +4,8 @@ namespace SourceIndexerNS
 {
     public abstract class IBackEnd
     {
-        public Logger Logger = new Logger();
+        public SettingsBean Parameters { get; set; }
+        public Logger LogWriter = new Logger();
         public abstract string BuildSrcSrvStream(List<RepositoryInfo> repositories);
     }
 }
